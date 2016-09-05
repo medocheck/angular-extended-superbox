@@ -1,3 +1,5 @@
+/*global Image */
+
 (function () {
   'use strict';
 
@@ -32,32 +34,32 @@
           }
         }
 
-		var indexByObj = function(array, obj) {
-			for (var i = 0; i < array.length; i++){
-				if (array[i].id === obj.id)
-					return i;
-			}
-		}
-		
+  		var indexByObj = function(array, obj) {
+  			for (var i = 0; i < array.length; i++){
+  				if (array[i].id === obj.id) {
+  					return i;
+          }
+  			}
+  		};
+
         scope._currentEntry = null;
 
         scope.currentEntry = function (entry) {
           if (arguments.length === 1) {
-			  
+
 			if (entry !== "undefined") {
-        		
+
         		var idxSuperBoxModel = indexByObj(scope.superboxModel, entry);
 
         		if (scope.superboxModel[idxSuperBoxModel].img_full_real === undefined) {
         			var img = new Image();
         			img.src = entry.img_full;
         			img.onload = function() {
-        				$anchorScroll();			
+        				$anchorScroll();
         			};
         			scope.superboxModel[idxSuperBoxModel].img_full_real = entry.img_full;
         		}
         	}
-			
             scope._currentEntry = entry;
             $location.hash('superbox-show-' + entry.id);
             $anchorScroll();
@@ -96,6 +98,26 @@
     };
   }]);
 
+  module.directive("superboxStatus", ['$compile', function($compile) {
+    return {
+      restrict: 'E',
+      scope: {
+        superboxTemplate: '=',
+        superboxText: '='
+      },
+      link: function (scope, element) {
+        console.log(scope);
+        element.html(scope.superboxText);
+        if(scope.superboxTemplate!==undefined) {
+          $compile(scope.superboxTemplate)(scope, function(cloned){
+             element.html(cloned);
+           });
+        }
+
+      }
+    };
+  }]);
+
 }());
 
 angular.module('superbox').run(['$templateCache', function($templateCache) {
@@ -104,8 +126,8 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/superbox/superbox.html',
     "<div class=\"as-superbox\" ng-model-options=\"{ getterSetter: true }\">\n" +
     "    <superbox-list entry=\"entry\"  actions=\"superboxActions\" current-entry=\"currentEntry\" ng-repeat=\"entry in superboxModel\"></superbox-list>\n" +
-    "    <div class=\"superbox-float\"></div>\n" +
-    "</div>"
+    "    <div class=\"as-superbox-float\"></div>\n" +
+    "</div>\n"
   );
 
 
@@ -114,6 +136,7 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
     "    <img ng-src=\"{{entry.img_thumb}}\"\n" +
     "         data-img=\"{{entry.img_full}}\"\n" +
     "         alt=\"{{entry.alt}}\" title=\"{{entry.title}}\" class=\"as-superbox-img\">\n" +
+    "         <superbox-status superbox-template=\"entry.statusTemplate\" superbox-text=\"entry.status\" class=\"mc-superbox-img-description mc-status-bg\"></superbox-status>\n" +
     "</div>\n" +
     "<div id=\"superbox-show-{{entry.id }}\" class=\"as-superbox-show\" style=\"display: block\" ng-show=\"isSelected(entry)\">\n" +
     "    <div id=\"imgInfoBox\" class=\"as-superbox-imageinfo\">\n" +
@@ -131,7 +154,7 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
     "    <img ng-src=\"{{entry.img_full_real}}\" class=\"as-superbox-current-img\">\n" +
     "\n" +
     "    <span class=\"glyphicon glyphicon-remove as-superbox-close\" aria-hidden=\"true\" ng-click=\"close()\"></span>\n" +
-    "</div>"
+    "</div>\n"
   );
 
 }]);

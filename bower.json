@@ -1,15 +1,15 @@
 {
-  "name": "angular-superbox",
+  "name": "angular-extended-superbox",
   "main": [
     "dist/angular-superbox.js",
     "dist/angular-superbox.css"
   ],
   "version": "1.0.0",
-  "homepage": "https://github.com/abuechler/angular-superbox",
+  "homepage": "https://github.com/medocheck/angular-extended-superbox",
   "author": {
-    "name": "https://github.com/abuechler/angular-superbox/graphs/contributors"
+    "name": "https://github.com/medocheck/angular-extended-superbox/graphs/contributors"
   },
-  "description": "AngularJS version of Superbox",
+  "description": "Angular Extended Superbox based on AngularJS version of Superbox",
   "license": "MIT",
   "ignore": [
     "**/.*",

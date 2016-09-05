@@ -1,9 +1,9 @@
 {
-  "name": "angular-superbox",
+  "name": "angular-extended-superbox",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/abuechler/angular-superbox"
+    "url": "https://github.com/medocheck/angular-extended-superbox.git"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

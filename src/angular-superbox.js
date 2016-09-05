@@ -1,3 +1,5 @@
+/*global Image */
+
 (function () {
   'use strict';
 
@@ -32,27 +34,28 @@
           }
         }
 
-		var indexByObj = function(array, obj) {
-			for (var i = 0; i < array.length; i++){
-				if (array[i].id === obj.id)
-					return i;
-			}
-		}
-		
+  		var indexByObj = function(array, obj) {
+  			for (var i = 0; i < array.length; i++){
+  				if (array[i].id === obj.id) {
+  					return i;
+          }
+  			}
+  		};
+
         scope._currentEntry = null;
 
         scope.currentEntry = function (entry) {
           if (arguments.length === 1) {
-			  
+
 			if (entry !== "undefined") {
-        		
+
         		var idxSuperBoxModel = indexByObj(scope.superboxModel, entry);
 
         		if (scope.superboxModel[idxSuperBoxModel].img_full_real === undefined) {
         			var img = new Image();
         			img.src = entry.img_full;
         			img.onload = function() {
-        				$anchorScroll();			
+        				$anchorScroll();
         			};
         			scope.superboxModel[idxSuperBoxModel].img_full_real = entry.img_full;
         		}
@@ -90,6 +93,26 @@
           scope.currentEntry("undefined");
         };
 
+
+      }
+    };
+  }]);
+
+  module.directive("superboxStatus", ['$compile', function($compile) {
+    return {
+      restrict: 'E',
+      scope: {
+        superboxTemplate: '=',
+        superboxText: '=',
+      },
+      link: function (scope, element) {
+        console.log(scope);
+        element.html(scope.superboxText);
+        if(scope.superboxTemplate!==undefined) {
+          $compile(scope.superboxTemplate)(scope, function(cloned){
+             element.html(cloned);
+           });
+        }
 
       }
     };
