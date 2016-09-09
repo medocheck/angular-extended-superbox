@@ -1,4 +1,4 @@
-<div class="as-superbox-list" ng-click="currentEntry(entry)">
+<div class="as-superbox-list" ng-class="{'as-superbox-list-selected' : isSelected(entry)}" ng-click="currentEntry(entry)" id="superbox-item-{{entry.id}}">
     <img ng-src="{{entry.img_thumb}}"
          data-img="{{entry.img_full}}"
          alt="{{entry.alt}}" title="{{entry.title}}" class="as-superbox-img">

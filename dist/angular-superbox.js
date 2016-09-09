@@ -19,6 +19,7 @@
       },
       link: function (scope) {
 
+        scope.scroll = true;
         // Mapping model fields if necessary...
         if (scope.superboxOptions && scope.superboxOptions.fieldMapping) {
           Object.getOwnPropertyNames(scope.superboxOptions.fieldMapping).forEach(function (val) {
@@ -26,6 +27,14 @@
               entry[val] = entry[scope.superboxOptions.fieldMapping[val]];
             });
           });
+        }
+
+        if(scope.superboxOptions && scope.superboxOptions.scrollEnabled) {
+          scope.scroll = scope.superboxOptions.scrollEnabled;
+        }
+
+        if(scope.superboxOptions && scope.superboxOptions.scrollsyOffset) {
+          $anchorScroll.yOffset = scope.superboxOptions.scrollyOffset;
         }
 
         for (var i = 0; i < scope.superboxModel.length; i++) {
@@ -47,22 +56,21 @@
         scope.currentEntry = function (entry) {
           if (arguments.length === 1) {
 
-			if (entry !== "undefined") {
+			        if (entry !== "undefined") {
+        		      var idxSuperBoxModel = indexByObj(scope.superboxModel, entry);
 
-        		var idxSuperBoxModel = indexByObj(scope.superboxModel, entry);
-
-        		if (scope.superboxModel[idxSuperBoxModel].img_full_real === undefined) {
-        			var img = new Image();
-        			img.src = entry.img_full;
-        			img.onload = function() {
-        				$anchorScroll();
-        			};
-        			scope.superboxModel[idxSuperBoxModel].img_full_real = entry.img_full;
-        		}
-        	}
-            scope._currentEntry = entry;
-            $location.hash('superbox-show-' + entry.id);
-            $anchorScroll();
+                		if (scope.superboxModel[idxSuperBoxModel].img_full_real === undefined) {
+                			var img = new Image();
+                			img.src = entry.img_full;
+                			img.onload = function() {
+                				$anchorScroll();
+                			};
+                			scope.superboxModel[idxSuperBoxModel].img_full_real = entry.img_full;
+                		}
+        	    }
+              scope._currentEntry = entry;
+              //$location.hash('superbox-item-' + entry.id);
+              //$anchorScroll();
           }
           return scope._currentEntry;
         };
@@ -92,8 +100,6 @@
         scope.close = function () {
           scope.currentEntry("undefined");
         };
-
-
       }
     };
   }]);
@@ -103,17 +109,15 @@
       restrict: 'E',
       scope: {
         superboxTemplate: '=',
-        superboxText: '='
+        superboxText: '=',
       },
       link: function (scope, element) {
-        console.log(scope);
         element.html(scope.superboxText);
         if(scope.superboxTemplate!==undefined) {
           $compile(scope.superboxTemplate)(scope, function(cloned){
              element.html(cloned);
            });
         }
-
       }
     };
   }]);
@@ -132,7 +136,7 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/superbox/superbox-list.html',
-    "<div class=\"as-superbox-list\" ng-click=\"currentEntry(entry)\">\n" +
+    "<div class=\"as-superbox-list\" ng-class=\"{'as-superbox-list-selected' : isSelected(entry)}\" ng-click=\"currentEntry(entry)\" id=\"superbox-item-{{entry.id}}\">\n" +
     "    <img ng-src=\"{{entry.img_thumb}}\"\n" +
     "         data-img=\"{{entry.img_full}}\"\n" +
     "         alt=\"{{entry.alt}}\" title=\"{{entry.title}}\" class=\"as-superbox-img\">\n" +
