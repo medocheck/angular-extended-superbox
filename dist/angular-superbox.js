@@ -15,10 +15,12 @@
       scope: {
         superboxModel: '=',
         superboxActions: '=',
-        superboxOptions: '=?'
+        superboxOptions: '=?',
       },
       link: function (scope) {
 
+console.log("options");
+console.log(scope.superboxOptions);
         scope.scroll = true;
         // Mapping model fields if necessary...
         if (scope.superboxOptions && scope.superboxOptions.fieldMapping) {
@@ -35,6 +37,10 @@
 
         if(scope.superboxOptions && scope.superboxOptions.scrollsyOffset) {
           $anchorScroll.yOffset = scope.superboxOptions.scrollyOffset;
+        }
+
+        if (scope.superboxOptions && scope.superboxOptions.superboxShowTemplate) {
+          scope.superboxShowTemplate = scope.superboxOptions.superboxShowTemplate;
         }
 
         for (var i = 0; i < scope.superboxModel.length; i++) {
@@ -81,7 +87,7 @@
   }
   ]);
 
-  module.directive('superboxList', [function () {
+  module.directive('superboxList', ['$compile', '$templateCache', '$http', function ($compile, $templateCache, $http) {
 
     return {
       templateUrl: 'templates/superbox/superbox-list.html',
@@ -89,9 +95,10 @@
       scope: {
         entry: '=',
         actions: '=',
-        currentEntry: '='
+        currentEntry: '=',
+        template: '='
       },
-      link: function (scope) {
+      link: function (scope, element) {
 
         scope.isSelected = function () {
           return scope.currentEntry() === scope.entry;
@@ -100,6 +107,16 @@
         scope.close = function () {
           scope.currentEntry("undefined");
         };
+
+        if(scope.template && scope.template !== "" ) {
+          var showElement = angular.element(element[0]).find('.as-superbox-imageinfo');
+            var templateLoader = $http.get(scope.template, {cache: $templateCache});
+            templateLoader.success(function(html) {
+                showElement.html(html);
+            }).then(function () {
+                showElement.html($compile(showElement.html())(scope));
+            });
+        }
       }
     };
   }]);
@@ -129,7 +146,7 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/superbox/superbox.html',
     "<div class=\"as-superbox\" ng-model-options=\"{ getterSetter: true }\">\n" +
-    "    <superbox-list entry=\"entry\"  actions=\"superboxActions\" current-entry=\"currentEntry\" ng-repeat=\"entry in superboxModel\"></superbox-list>\n" +
+    "    <superbox-list entry=\"entry\"  template=\"superboxShowTemplate\" actions=\"superboxActions\" current-entry=\"currentEntry\" ng-repeat=\"entry in superboxModel\"></superbox-list>\n" +
     "    <div class=\"as-superbox-float\"></div>\n" +
     "</div>\n"
   );
@@ -143,7 +160,7 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
     "         <superbox-status superbox-template=\"entry.statusTemplate\" superbox-text=\"entry.status\" class=\"mc-superbox-img-description mc-status-bg\"></superbox-status>\n" +
     "</div>\n" +
     "<div id=\"superbox-show-{{entry.id }}\" class=\"as-superbox-show\" style=\"display: block\" ng-show=\"isSelected(entry)\">\n" +
-    "    <div id=\"imgInfoBox\" class=\"as-superbox-imageinfo\">\n" +
+    "    <div id=\"superbox-imgInfoBox-{{entry.id}}\" class=\"as-superbox-imageinfo\">\n" +
     "        <h1>{{entry.title}}</h1>\n" +
     "        <span>\n" +
     "            <p class=\"as-superbox-img-description\">{{entry.description}}</p>\n" +

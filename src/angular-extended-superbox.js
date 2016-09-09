@@ -15,10 +15,12 @@
       scope: {
         superboxModel: '=',
         superboxActions: '=',
-        superboxOptions: '=?'
+        superboxOptions: '=?',
       },
       link: function (scope) {
 
+console.log("options");
+console.log(scope.superboxOptions);
         scope.scroll = true;
         // Mapping model fields if necessary...
         if (scope.superboxOptions && scope.superboxOptions.fieldMapping) {
@@ -35,6 +37,10 @@
 
         if(scope.superboxOptions && scope.superboxOptions.scrollsyOffset) {
           $anchorScroll.yOffset = scope.superboxOptions.scrollyOffset;
+        }
+
+        if (scope.superboxOptions && scope.superboxOptions.superboxShowTemplate) {
+          scope.superboxShowTemplate = scope.superboxOptions.superboxShowTemplate;
         }
 
         for (var i = 0; i < scope.superboxModel.length; i++) {
@@ -81,7 +87,7 @@
   }
   ]);
 
-  module.directive('superboxList', [function () {
+  module.directive('superboxList', ['$compile', '$templateCache', '$http', function ($compile, $templateCache, $http) {
 
     return {
       templateUrl: 'templates/superbox/superbox-list.html',
@@ -89,9 +95,10 @@
       scope: {
         entry: '=',
         actions: '=',
-        currentEntry: '='
+        currentEntry: '=',
+        template: '='
       },
-      link: function (scope) {
+      link: function (scope, element) {
 
         scope.isSelected = function () {
           return scope.currentEntry() === scope.entry;
@@ -100,6 +107,16 @@
         scope.close = function () {
           scope.currentEntry("undefined");
         };
+
+        if(scope.template && scope.template !== "" ) {
+          var showElement = angular.element(element[0]).find('.as-superbox-imageinfo');
+            var templateLoader = $http.get(scope.template, {cache: $templateCache});
+            templateLoader.success(function(html) {
+                showElement.html(html);
+            }).then(function () {
+                showElement.html($compile(showElement.html())(scope));
+            });
+        }
       }
     };
   }]);

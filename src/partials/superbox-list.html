@@ -5,7 +5,7 @@
          <superbox-status superbox-template="entry.statusTemplate" superbox-text="entry.status" class="mc-superbox-img-description mc-status-bg"></superbox-status>
 </div>
 <div id="superbox-show-{{entry.id }}" class="as-superbox-show" style="display: block" ng-show="isSelected(entry)">
-    <div id="imgInfoBox" class="as-superbox-imageinfo">
+    <div id="superbox-imgInfoBox-{{entry.id}}" class="as-superbox-imageinfo">
         <h1>{{entry.title}}</h1>
         <span>
             <p class="as-superbox-img-description">{{entry.description}}</p>
