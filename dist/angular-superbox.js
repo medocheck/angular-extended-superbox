@@ -149,7 +149,7 @@ angular.module('superbox').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/superbox/superbox.html',
     "<div class=\"as-superbox\" ng-model-options=\"{ getterSetter: true }\">\n" +
-    "    <superbox-list entry=\"entry\"  template=\"superboxShowTemplate\" actions=\"superboxActions\" current-entry=\"currentEntry\" ng-repeat=\"entry in superboxModel | orderBy('sort')\"></superbox-list>\n" +
+    "    <superbox-list entry=\"entry\"  template=\"superboxShowTemplate\" actions=\"superboxActions\" current-entry=\"currentEntry\" ng-repeat=\"entry in superboxModel | orderBy: 'sort'\"></superbox-list>\n" +
     "    <div class=\"as-superbox-float\"></div>\n" +
     "</div>\n"
   );
