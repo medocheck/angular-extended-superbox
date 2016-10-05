@@ -1,4 +1,4 @@
 <div class="as-superbox" ng-model-options="{ getterSetter: true }">
-    <superbox-list entry="entry"  template="superboxShowTemplate" actions="superboxActions" current-entry="currentEntry" ng-repeat="entry in superboxModel"></superbox-list>
+    <superbox-list entry="entry"  template="superboxShowTemplate" actions="superboxActions" current-entry="currentEntry" ng-repeat="entry in superboxModel | orderBy('sort')"></superbox-list>
     <div class="as-superbox-float"></div>
 </div>

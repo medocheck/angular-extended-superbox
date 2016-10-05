@@ -5,6 +5,7 @@
          <superbox-status superbox-template="entry.statusTemplate" superbox-text="entry.status" class="mc-superbox-img-description mc-status-bg"></superbox-status>
 </div>
 <div id="superbox-show-{{entry.id }}" class="as-superbox-show" style="display: block" ng-show="isSelected(entry)">
+    <div class="as-superbox-show-template">
     <div id="superbox-imgInfoBox-{{entry.id}}" class="as-superbox-imageinfo">
         <h1>{{entry.title}}</h1>
         <span>
@@ -18,6 +19,6 @@
         </span>
     </div>
     <img ng-src="{{entry.img_full_real}}" class="as-superbox-current-img">
-
+    </div>
     <span class="glyphicon glyphicon-remove as-superbox-close" aria-hidden="true" ng-click="close()"></span>
 </div>
