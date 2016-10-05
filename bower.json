@@ -4,7 +4,7 @@
     "dist/angular-superbox.js",
     "dist/angular-superbox.css"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/medocheck/angular-extended-superbox",
   "author": {
     "name": "https://github.com/medocheck/angular-extended-superbox/graphs/contributors"
